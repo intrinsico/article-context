@@ -1,0 +1,89 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{hyperref}
+\usepackage{color}
+\usepackage{cleveref}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+
+\newcommand{\todo}[1]{{\color{red}\textsf{\textbf{TODO}}: #1}}
+\newcommand{\uri}[1]{\texttt{#1}}
+\newcommand{\word}[1]{`#1'}
+\newcommand{\model}[1]{\textsf{#1}}
+%\newcommand{\Cref}[1]{\ref{#1}}
+\crefname{table}{Table}{Tables}
+
+\title{Where is the Context for Disambiguation? An Experimental Analysis.}
+\author{Pablo N. Mendes}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\end{abstract}
+
+\section{Introduction}
+
+We have many potential sources of context to model each DBpedia entity:
+-title (the title of the article associated with concept c), 
+-sentence (the first sentence of the article),
+-paragraph (the first paragraph of the article), 
+-content (the full contents of the article), and 
+-anchor (the aggregated anchor texts of all incoming links in Wikipedia).
+-aggregation of all paragraphs like we do in spotlight,
+-text from ontology
+-- all properties
+-- all objects
+-- etc.
+
+hypotheses
+
+When modeling entity context for disambiguation,
+- entity names are the most important part of the text, therefore we can safely discard other words 
+- there is a trade-off when discarding words. Discarding low frequency words does not hurt performance
+- there is a trade-off when discarding words. Discarding high frequency words does not hurt performance
+- (can we test if words are distributionally independent from entity names)
+- words provide context that entity names cannot capture
+
+When looking at co-occurring entity names for modeling context,
+- entities that occur in the entity's article are better descriptors
+- entities that occur in the first section of the entity's article are better descriptors
+- entities that occur in text outside of entity's articles are better representatives of occurrences
+-- entities that occur within the same article talking about the other entity
+-- entities that occur within the same paragraph
+-- entities that occur within a window of 200 words
+
+Other questions:
+- how many annotated sentences is enough?
+
+\section{Related Work}
+
+Paper by Ratinov. \cite{acl11ratinov}
+Paper by Edgar Meij. \cite{wsdm12meij.pdf}
+Paper suggested to me by Johannes Hoffart.
+
+\section{Datasets}
+
+We will be using the English and Portuguese Wikipedias, and corresponding DBpedias. From those we will use the DBpedia Spotlight extraction framework to obtain paragraphs, and from those paragraphs we will strip down words, grab entities, etc. From the new code we will extract properties, objects, types, etc. from the ontology, to have our "ontology neighborhood" context. 
+
+For each kind of context, we will generate one occs.tsv file. T
+We will generate an index with the Lucene backend (initially) for each of the context files. 
+
+\section{Experiments}
+
+We will use the EvaluateParagraphDisambiguation code to run evaluations with the same datasets for each of the context indexes we built. This should give us some initial insight into the tradeoff between the context extraction methods. Report these in a table.
+
+
+\section{Conclusion}
+
+Potential Conclusions / Impact
+- Compression: if we find out that we can discard words, we can have the entire index in less space (allowing to load to RAM, perform faster, etc.)
+- Need for training data: if we find out that using entity names from the neighborhood from an ontology is good enough, then our technique is applicable to several other ontologies without massive corpora like Wikipedia/DBpedia
+
+\end{document}
