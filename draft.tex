@@ -47,7 +47,7 @@ This paper presents a comprehensive experimental analysis of the impact of diffe
 
 Overall message of this section:
 \begin{itemize}
-\item Background: what is disambiguation,
+\item Background: what is disambiguation, one sentence about DBpedia, why is it important (Google Knowledge Graph, IBM Watson, etc.), one sentence on what has been done in the area. 
 \item Motivation: why look for other sources of context? First, we would like to see for the DBpedia/Wikipedia duo, if we can focus on a smaller set of words without losing accuracy (space efficiency). Second, if we determine that using types, properties, etc. can work just as well, then there is hope that other ontologies that don't have an associated corpus like Wikipedia can be used as context for disambiguation. Although we cannot guarantee that, we are describing here an evaluation strategy and associated code that can be applied to new ontologies in order to evaluate its efficacy as context.
 \item Approach: focus on a fixed set of target knowledge bases (DBpedia), context modeling paradigm (VSM of words), evaluation dataset (CSAW, M\&W) so that we can evaluate the impact of the source of context in the evaluation. We extract them using RDF, so it can be applied to other KBs easily.
 \item Evaluation: for each dataset, and for each combination of datasets we have tested with well known evaluation datasets and found out that X,Y and Z methods perform better.
@@ -165,9 +165,11 @@ Other questions:
 
 \todo{Add table with individual results of each of the paragraph-extracted contexts for each evaluation dataset}
 
+\todo{Pablo: can we further distinguish between different types of paragraph based on if they are descriptive or discursive?}
+
 \subsection{Optimal combinations}
 
-\todo{Carol will generate one index per type of context. For each disambiguation example in an evaluation set, she will query eachof the indexes, obtain a ``contextual score'' for each of the N indexes and output a TSV file with $\langle occId, correctUri, contextScore1, contextScore2, ..., contextScoreN\rangle$. First line of the TSV is the header with names of columns.}
+\todo{Carol will generate one index per type of context. For each disambiguation example in an evaluation set, she will query each of the indexes, obtain a ``contextual score'' for each of the N indexes and output a TSV file with $\langle occId, correctUri, contextScore1, contextScore2, ..., contextScoreN\rangle$. First line of the TSV is the header with names of columns.}
 \todo{Pablo will run the machine learning algorithms once provided the data.}
 
 \section{Conclusion}
