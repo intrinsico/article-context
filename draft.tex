@@ -85,6 +85,22 @@ We have created a different context model from each of these datasets.
 We have extracted words from properties, objects, types and labels of the DBpedia resource and group them by the subject in order to have  different sources of context to model each DBpedia entity. \todo{Carol}.
 The very first step of such process is to process the RDF representation of DBpedia to extract all properties , objects and types of DBpedia resources. We consider as potential resources data provided by (1) the Mapping-based properties, as (...), (2) Instance types, as (...) and (3) wikilinks, in which (...). Each context is extracted individually, tokenized and then counted. 
 
+
+%Carol Begin
+
+\textbf{Infobox} dataset stands as a complete coverage of all Wikipedia properties, which represents all properties from all infoboxes and templates within all articles from Wikipedia. It uses the http://dbpedia.org/property/  namespace  to represent extracted information, which directly reflect the name of the Wikipedia infobox property. For the 3.8 version, there are approximately 8000 different property types.
+
+\textbf{Mapping-based properties}, in turn, it is a hand-generated mappings of Wikipedia infoboxes/templates. The major difference between Mapping-based and Infobox datasets relies in the fact that the Mapping-based is much cleaner and better structured than Infobox. However,  due to this extraction method, Mapping based  doesn't cover all infobox types and infobox properties within Wikipedia as Infobox does.
+
+\textbf{Instance types}, also known as Mapping-based Types, like the Mapping-based properties dataset, is a hand-generated mappings of Wikipedia infoboxes/templates, which extracts the types instead of properties. It is a DBpedia Ontology RDF type statements, that are extracted from infoboxes.
+
+\textbf{Wikilinks} dataset contains all intern links between DBpedia resources, which is the result of the extraction of all internal links between Wikipedia articles.
+
+In order to extract individual context from the DBpedia datasets listed above, each dataset was grouped by subject (uri), and all resources related to each uri mapped into their respective labels from the Labels dataset - which represents the titles of all Wikipedia Articles, tokenized and then counted. As a complement to the object context,  properties extraction was also covered for both Mapping-Based Properties and Infobox, as such datasets offer information at both levels - object and property.
+
+%Carol End
+
+
 \paragraph{Wikipedia}
 Since DBpedia has its roots on Wikipedia, previous work \cite{isem11mendes} has used Wikipedia paragraphs to model DBpedia Resources for disambiguation tasks.
 For each DBpedia resource, we extracted the list of paragraphs containing links to the corresponding Wikipedia page for this resource. 
@@ -159,9 +175,77 @@ Other questions:
 
 \subsection{Ontology-based context}
 
+
+
 \todo{Add table with individual results of each of the DBpedia-extracted contexts for each evaluation dataset}
 
-\subsection{Paragraph-based context}
+%Carol Begin
+
+\begin{table}[ht] 
+\caption{Objects Context Accuracy}
+\centering
+\begin{tabular}{c c c c}
+\hline\hline 
+Ontology Dataset	& Milne 	& CSAW 	& CoNLL \\ [0.5ex] 
+\hline 
+Infobox 			& 0.607	& 0.575	& 0.623 \\ 
+MappingBased 		& 0.576 	& 0.508 	& 0.549 \\ 
+Pagelinks 			&  		&  		& 0.311 \\ 
+InstanceTypes 		& 0.583	& 0.520	& 0.514 \\  [1ex] 
+\hline
+\end{tabular} 
+\label{table:nonlin} 
+\end{table} 
+
+\begin{table}[ht] 
+\caption{Properties Context Accuracy} 
+\centering
+\begin{tabular}{c c c c}
+\hline\hline 
+Ontology Dataset	& Milne 	& CSAW 	& CoNLL \\ [0.5ex] 
+\hline 
+Infobox 			& 0.617	& 0.562	& 0.567 \\ 
+MappingBased 		& 0.611 	& 0.500 	& 0.514 \\ 
+Pagelinks 			&  -		&  -		& - \\ 
+InstanceTypes 		&  -		&  -		& - \\  [1ex] 
+\hline
+\end{tabular} 
+\label{table:nonlin} 
+\end{table} 
+
+\begin{table}[ht] 
+\caption{Objects and Properties Context Accuracy} 
+\centering
+\begin{tabular}{c c c c}
+\hline\hline 
+Ontology Dataset	& Milne 	& CSAW 	& CoNLL \\ [0.5ex] 
+\hline 
+Infobox 			& 0.590	& 0.582	& 0.633 \\ 
+MappingBased 		& 0.604 	& 0.507 	& 0.551\\ 
+Pagelinks 			&  -		&  -		&  -\\ 
+InstanceTypes 		&  -		&  -		& - \\ [1ex] 
+\hline
+\end{tabular} 
+\label{table:nonlin} 
+\end{table} 
+
+\begin{table}[ht] 
+\caption{POS Accuracy}
+\centering
+\begin{tabular}{c c c c}
+\hline\hline 
+Ontology Dataset		& Milne 	& CSAW 	& CoNLL \\ [0.5ex] 
+\hline 
+left tokens 			& 		&	 	&  \\ 
+right tokens			&  		&  		&  \\ 
+right and left tokens		& 		& 		&  \\  [1ex] 
+\hline
+\end{tabular} 
+\label{table:nonlin} 
+\end{table} 
+
+
+%Carol End
 
 \todo{Add table with individual results of each of the paragraph-extracted contexts for each evaluation dataset}
 
