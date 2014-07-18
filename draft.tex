@@ -10,6 +10,7 @@
 \usepackage{graphicx}
 \usepackage{caption}
 \usepackage{subcaption}
+\usepackage{verbatim}
 
 \newcommand{\todo}[1]{{\color{red}\textsf{\textbf{TODO}}: #1}}
 \newcommand{\uri}[1]{\texttt{#1}}
@@ -19,79 +20,161 @@
 \crefname{table}{Table}{Tables}
 
 \title{Where is the Context for Disambiguation? An Experimental Analysis.}
-\author{TBD}
+%\author{TBD}
 \date{\today}
 
 \begin{document}
 \maketitle
 
-\begin{abstract}
-This paper presents a comprehensive experimental analysis of the impact of different sources of context for the recognition and semantic disambiguation of concepts and entities from knowledge bases. 
+% \begin{comment}
 
-\textbf{Timeline}:
-\begin{itemize}
-\item Oct 20: First draft (this)
-\item Oct 30: Tables with dataset descriptions
-\item Nov 10: Tables with evaluation results for ontology context
-\item Nov 20: Tables with evaluation results for paragraph context (from different sources)
-\item Nov 30: Discussion of evaluation
-\item Dec 10: First draft full paper
-\item Dec 20: Final draft.
-\end{itemize}
-\end{abstract}
+% \begin{abstract}
+% This paper presents a comprehensive experimental analysis of the impact of different sources of context for the recognition and semantic disambiguation of concepts and entities from knowledge bases. 
 
-\todo{Write one sentence per line, since it makes it easier to do merges later. Rephrase or clearly mark copy+pasted text from other authors so that we don't end up being sued for plagiarism.}
+% \textbf{Timeline}:
+% \begin{itemize}
+% \item Oct 20: First draft (this)
+% \item Oct 30: Tables with dataset descriptions
+% \item Nov 10: Tables with evaluation results for ontology context
+% \item Nov 20: Tables with evaluation results for paragraph context (from different sources)
+% \item Nov 30: Discussion of evaluation
+% \item Dec 10: First draft full paper
+% \item Dec 20: Final draft.
+% \end{itemize}
+% \end{abstract}
+
+% \todo{Write one sentence per line, since it makes it easier to do merges later. Rephrase or clearly mark copy+pasted text from other authors so that we don't end up being sued for plagiarism.}
+% \end{comment}
 
 \section{Introduction}
-\todo{Pablo will write this section once results are in.}
+%\todo{Pablo will write this section once results are in.}
 
-Overall message of this section:
-\begin{itemize}
-\item Background: what is disambiguation, one sentence about DBpedia, why is it important (Google Knowledge Graph, IBM Watson, etc.), one sentence on what has been done in the area. 
-\item Motivation: why look for other sources of context? First, we would like to see for the DBpedia/Wikipedia duo, if we can focus on a smaller set of words without losing accuracy (space efficiency). Second, if we determine that using types, properties, etc. can work just as well, then there is hope that other ontologies that don't have an associated corpus like Wikipedia can be used as context for disambiguation. Although we cannot guarantee that, we are describing here an evaluation strategy and associated code that can be applied to new ontologies in order to evaluate its efficacy as context.
-\item Approach: focus on a fixed set of target knowledge bases (DBpedia), context modeling paradigm (VSM of words), evaluation dataset (CSAW, M\&W) so that we can evaluate the impact of the source of context in the evaluation. We extract them using RDF, so it can be applied to other KBs easily.
-\item Evaluation: for each dataset, and for each combination of datasets we have tested with well known evaluation datasets and found out that X,Y and Z methods perform better.
-\item Conclusion: we determined that space can be saved if you are willing to compromise X\% of your accuracy. Moreover, using other ontologies as source of context is not impossible, as long as it has descriptive chooseFrom(properties, types, objects, etc.)
-\end{itemize}
 
-%This paper discusses and evaluates different alternatives for extracting context in order to improve the disambiguation of named entities. 
-%The DBpedia Spotlight process the linking of unstructured information sources to the Linked Open Data cloud through DBpedia, by automatically annotating mentions of DBpedia resources. It is able to recognize(...). Is also  offers many potential sources of context to model each entity, such as title, sentence, paragraph, content, anchor, and so on. Through the contextual information extraction process for the disambiguation process, as well as the  indexing of named entities among candidates entities of unstructured texts, the experimental analysis shows a higher disambiguation  accuracy in comparison with other research on Wikipedia resource.
+In natural language processing, Disambiguation is the process of resolving  the ambiguity  that arise in entities present in unstructured texts. To be processed, however, we first need to provide a system to solve the annotation of entities in such texts.  In this sense, the DBpedia Spotlight [] -  an open source project, provides different techniques to recognize  and disambiguate natural language mentions in the Web. The Natural Language Processing community has put a considerable effort to solve the disambiguation problem, as many applications now rely on natural language. In fact, current and open problems that could  benefit from advances in this area are, for instance, context-sensitive  disambiguation, social ads, and many other related problems. From the social media perspective, disambiguation is even more critical, mainly due to the fact that they are more connected and increasingly presents different types of sources.
 
-%DBpedia Spotlight relies on a number of data sources in order to support annotation tasks. Some sources provide metadata such as the types of entity: Person, Location or Organization, for instance. Other sources provide statistical context in which certain words are more strongly associated with certain entities. Thus, this analysis will allow us to  evaluate which sources of information provide best information for disambiguation.
+The DBpedia Spotlight  supports many different languages including English and Portuguese, and its disambiguation process  involves  structured data from the Dbpedia[] and is highly based on Wikipedia. The DBpedia[] project, provides structured data from the extraction of structured information from Wikipedia, and  both DBpedia  and Wikipedia offers data in many different langue. Because of this variety of languages,  it is also possible to adapt the Dbpedia Spotlight to those languages. On the other hand, working with Wikipedia data brings an overhead due to the size os its dataset, as English samples can easily be very large. In fact, if we restrict the disambiguation problem to work only on ontologies that are associated, like Wikipedia datasets, we would be  dealing strictly with large amount of data besides being  indirectly discarding other ontologies sources.
 
+
+Bearing this in mind, this paper aims to evaluate  others knowledge bases rather than Wikipedia.  Though fixed set of target knowledge bases, context modeling paradigm as well as part of speech descriptors we aim to evaluate the impact of these different source of context in the performance evaluation. To this end, we use different structured DBpedia files, that it is of relevance to the disambiguation process, to extract the entities' context, and verbs that are related to each entity, from the Wikipedia paragraphs. The DBpedia files used  are Infobox, Mapping-based properties, Instance Types and Wikilinks, which are discussed later in section X. After this extraction,  we generate small different datasets to perform the evaluation itself.
+
+By evaluation each extracted dataset as well as each combination of these datasets, we  show that, for English data, X and Y have the best performance when performing  the M7M evaluation corpus. Indeed,  thought the results, which are better described in section Y, we show  that a large amount of space can be saved if you are willing to compromise X\% of your accuracy. As full disambiguation process, by using Wikipedia resources, uses XX space and presents UU accuracy. Moreover, we also believe that using this methodology, we enable the use of any ontology as source of context, as long as it has properties, types and objects available, to build an entity name annotation and disambiguation model.
+
+
+
+% \begin{comment}
+
+% The goal of DBpedia Spotlight is to provide an adaptable system to find and disambiguate natural language mentions of DBpedia resources. Much research has been devoted to the problem of automatic disambiguation - as we discuss in Section 5. In comparison with previous work, DBpedia Spotlight aims at a more comprehensive and flexible solu- tion. First, while other annotation systems are often re- stricted to a small number of resource types, such as people, organisations and places, our system attempts to annotate DBpedia resources of any of the 272 classes (more than 30 top level) in the DBpedia Ontology. 
+
+% Disambiguation in natural language is a general problem of resolving the ambiguity present in natural language. The problems are, for example, word sense disambiguation, context-sensitive spelling error correction, the more special problem of gene/protein name disambiguation, and many other related problems.
+% Word sense disambiguation (WSD) is a long studied problem in the natural language processing community and it is important especially in the areas of information extraction and text understand- ing research. Given an ambiguous word in a text, the task of word sense disambiguation is to decide which of the several possible senses the word takes in this given instance. An often used example is the word ?bank?. Bank can be a river bank, it can be a financial institution, or it can be the house in which the financial institution resides.
+
+% DBpedia Spotlight [3] is an open source project develop- ing a system for automatic annotation of DBpedia entities in natural language text. It provides programmatic interfaces for phrase spotting (recognition of phrases to be annotated) and disambiguation (entity linking) as well as various output formats (XML, JSON, RDF, etc.) in a REST-based web ser- vice. The standard disambiguation algorithm is based upon cosine similarities and a modification of TF-IDF weights (us- ing Apache Lucene1). The main phrase spotting algorithm is exact string matching, which uses LingPipe?s2 Aho-Corasick implementation.
+% The project has focused initially on the English language. However, since DBpedia Spotlight?s models are learned from Wikipedia, it should be possible to adapt the system to any other language that has a Wikipedia edition. In addition, al- though fairly intensively used by researchers3 and others,4,5 the current implementation can be improved in certain as- pects.
+% In this paper, we describe how we enhanced the perfor- mance and accuracy of our entity recognition and disam- biguation components and discuss challenges encountered while adapting DBpedia Spotlight to work with other lan- guages. For this experiment, we focused on the Dutch lan- guage. As a result, we present a new version of the system, which is faster, more accurate and improves the ease of in- ternationalization. Demonstrations of internationalized ver- sions are provided in English and Dutch and models for 7 additional languages are made available via the supporting material for this submission.
+
+% We have many potential sources of context to model each DBpedia entity:
+% -title (the title of the article associated with concept c), 
+% -sentence (the first sentence of the article),
+% -paragraph (the first paragraph of the article), 
+% -content (the full contents of the article), and 
+% -anchor (the aggregated anchor texts of all incoming links in Wikipedia).
+% -aggregation of all paragraphs like we do in spotlight,
+% -text from ontology
+% -- all properties
+% -- all objects
+% -- etc.
+
+
+% Overall message of this section:
+% \begin{itemize}
+% \item Background: what is disambiguation, one sentence about DBpedia, why is it important (Google Knowledge Graph, IBM Watson, etc.), one sentence on what has been done in the area. 
+% \item Motivation: why look for other sources of context? First, we would like to see for the DBpedia/Wikipedia duo, if we can focus on a smaller set of words without losing accuracy (space efficiency). Second, if we determine that using types, properties, etc. can work just as well, then there is hope that other ontologies that don't have an associated corpus like Wikipedia can be used as context for disambiguation. Although we cannot guarantee that, we are describing here an evaluation strategy and associated code that can be applied to new ontologies in order to evaluate its efficacy as context.
+% \item Approach: focus on a fixed set of target knowledge bases (DBpedia), context modeling paradigm (VSM of words), evaluation dataset (CSAW, M\&W) so that we can evaluate the impact of the source of context in the evaluation. We extract them using RDF, so it can be applied to other KBs easily.
+% \item Evaluation: for each dataset, and for each combination of datasets we have tested with well known evaluation datasets and found out that X,Y and Z methods perform better.
+% \item Conclusion: we determined that space can be saved if you are willing to compromise X\% of your accuracy. Moreover, using other ontologies as source of context is not impossible, as long as it has descriptive chooseFrom(properties, types, objects, etc.)
+% \end{itemize}
+
+% %This paper discusses and evaluates different alternatives for extracting context in order to improve the disambiguation of named entities. 
+% %The DBpedia Spotlight process the linking of unstructured information sources to the Linked Open Data cloud through DBpedia, by automatically annotating mentions of DBpedia resources. It is able to recognize(...). Is also  offers many potential sources of context to model each entity, such as title, sentence, paragraph, content, anchor, and so on. Through the contextual information extraction process for the disambiguation process, as well as the  indexing of named entities among candidates entities of unstructured texts, the experimental analysis shows a higher disambiguation  accuracy in comparison with other research on Wikipedia resource.
+
+% %DBpedia Spotlight relies on a number of data sources in order to support annotation tasks. Some sources provide metadata such as the types of entity: Person, Location or Organization, for instance. Other sources provide statistical context in which certain words are more strongly associated with certain entities. Thus, this analysis will allow us to  evaluate which sources of information provide best information for disambiguation.
+
+% \end{comment}
 
 \section{Related Work}
 
-\todo{Check which of the context types that we evaluate here have been already discussed in literature.}
+%\todo{Check which of the context types that we evaluate here have been already discussed in literature.}
 
-Paper by Ratinov. \cite{acl11ratinov}
-Paper by Edgar Meij. \cite{wsdm12meij}
-Paper suggested to me by Johannes Hoffart.
-Survey by Hachey \cite{aij13hachey}.
-Other survey.
+There is an extensive literature  covered by the Natural Language Processing community on entity annotation and disambiguation in general. Mendes et al [], Bunesco and Pasca [], Cucerzan [], Mihalcea and Csomai (Wikify!) [19] and Witten and Milne (MW) [20], use text from Wikipedia to learn how to annotate. While Mendes takes into consideration all Wikipedia articles, evaluating  many different classes (over X, including person, organization, place, albums, etc), Bunesco and Pasca only evaluate articles under the people by occupation category, and Cucerzan's and Wikify!'s conservative spotting only annotate 4.5 and 6 of all tokens in the input text, respectively. 
 
-\todo{Add a closing paragraph saying what we do that nobody has done before.}
+Recent work in entity annotation and disambiguation has emphasized a contextual approach, in which resources are represented as context words, which, in turn, presents a semantic relation with the resource itself. Common to the traditional approaches, which uses Wikipedia as source, is the idea that a word (resource) is explicit represented in a context-based fashion. Thus, instead of analyzing all data in wich a resource appear, we can extract its context, as they believe resources have semantic connections. In this sense, Jabeen et all[] proposes a solution for the disambiguation  problem by using context information. As DBpedia, it also uses Wikipedia  to extract one single term as the resource context. Indeed, they explored Wikipedia hyperlinks structure and senses for disambiguating the context of a term pair by learning the meaning of a term using the other term as the context.  Thus, Jabeen carried out experiments  using Wikipedia disambiguation and  hyperlink information, in which Wikipedia disambiguation pages  are used to extract all listed senses as candidate senses and populate them in the context set of each input term, and Wikipedia hyperlink page to calculate the semantic similarity between candidate contexts.
 
-\section{Datasets}
-\todo{We will be using the English DBpedia and corresponding Wikipedia. From those we will use the DBpedia Spotlight extraction framework to obtain paragraphs, and from those paragraphs we will strip down words, grab entities, etc. From the new code we will extract properties, objects, types, etc. from the ontology, to have our "ontology neighborhood" context.}
+Annotation and Disambiguation techniques for social media have, in recent years, gained attention from the NLP community to decide the real meaning of small microblogging posts. Due to the limited content, informal nature and creative language usage, recent research relies on the fact that microblogging are  highly contextualized, to proposed contextual approaches to solve the annotation and disambiguation problemas. Accordingly,  Edgar Meij
+ proposes a solution to the problem of determining the meaning of a microblog post through semantic linking. It approaches the task of linking tweets, which presents a small content,  to Wikipedia concepts as a ranking problem. Thus,  given a tweet,  a ranked list of concepts meant by or contained in it, is calculated. In such a ranked list, the higher rank indicates a higher degree of relevance of the concept to the tweet. In fact, this approach uses Wikipedia article pages to determine the context of each tweet to facilitate the disambiguation task.
 
-\paragraph{DBpedia}\todo{Jairo?}
-DBpedia \cite{swj13dbpedia} is one of the most well known KBs in the SeWeb community... \todo{Jairo?}\todo{Can get text from previous publications by Pablo}
-It is built from Wikipedia...
-Community generated mappings help to normalize the data into an Ontology.
 
-Therefore, DBpedia provides several different ways to describe each of its resources, namely by their types, categories, normalized properties, etc.
-We have created a different context model from each of these datasets.
-We have extracted words from properties, objects, types and labels of the DBpedia resource and group them by the subject in order to have  different sources of context to model each DBpedia entity. \todo{Carol}.
-The very first step of such process is to process the RDF representation of DBpedia to extract all properties , objects and types of DBpedia resources. We consider as potential resources data provided by (1) the Mapping-based properties, as (...), (2) Instance types, as (...) and (3) wikilinks, in which (...). Each context is extracted individually, tokenized and then counted. 
+Inspired by these different researches that achieve significant results by using context to enrich the learning data, we  propose something that has not yet been experimented in the literacture. In order to find out how important different semantic relations are to a specific resource, we carried out different experiments by using different semantic relations type to find out the influence and significance of each context type in the disambiguation task. \todo{...}
 
-\paragraph{Wikipedia}
-Since DBpedia has its roots on Wikipedia, previous work \cite{isem11mendes} has used Wikipedia paragraphs to model DBpedia Resources for disambiguation tasks.
-For each DBpedia resource, we extracted the list of paragraphs containing links to the corresponding Wikipedia page for this resource. 
-We tokenized each paragraph, removed stopwords and aggregated term frequencies over the entire corpus for each resource.
+%Paper by Ratinov. \cite{acl11ratinov}
+%Paper by Edgar Meij. \cite{wsdm12meij}
+%Paper suggested to me by Johannes Hoffart.
+%Survey by Hachey \cite{aij13hachey}.
+%Other survey.
 
-We have extended previous work by inspecting more closely different sources of paragraphs.
-We have many potential sources of context to model each DBpedia entity:
+%\todo{Add a closing paragraph saying what we do that nobody has done before.}
+
+\section{Resources}
+%\todo{We will be using the English DBpedia and corresponding Wikipedia. From those we will use the DBpedia Spotlight extraction framework to obtain paragraphs, and from those paragraphs we will strip down words, grab entities, etc. From the new code we will extract properties, objects, types, etc. from the ontology, to have our "ontology neighborhood" context.}
+
+
+\subsection{DBpedia Ontology} 
+
+The DBpedia \cite{swj13dbpedia} is one of the most well known knowledge bases in the SeWeb community. It is a project that is interlinking different sources in the Linked Open Data cloud by organizing the knowledge extracted from Wikipedia in a structure of 320 different classes in an hierarchy fashion. Those classes are de- scribed by 1,650 different properties and has been growing even more. The English knowledge base holds labels and abstracts for more then 4 million re- sources classified in a consistent cross-domain ontology with classes such as of persons, places, music albums, films, video games, organizations, species, dis- eases, among others. Besides the resources classification itself, it also provides links to external web pages, images, Wikipedia categories and geographic coordinates for places. In fact, DBpedia provides a rich pool of resource attributes and relations between the resources.
+In addiction, the DBpedia sets use a large multi-domain ontology which has been derived from Wikipedia and comprises, among others, datasets such as Mapping-based Types, Mapping-based Properties, Titles, Short and Extended Abstracts, etc. These datasets are what describe each of tis resources, in terms of types, categories, normalized properties, etc. The DBpedia Spotlight, as already stated, uses source from Wikipedia and from DBpedia datasets.
+The key ideia of the context extraction, however, relies on the fact that we can build different sources of context to model each DBpedia entity, discarding the Wikipedia dependency. Through the DBpedia datasets, we can extract words from different resources such as properties, objects, types and labels and group them by the subject. Accordingly, as one of the main goal of this paper is also to minimize the data used in the learning process, we consider as potential resources data provided by the following sets:
+
+\textbf{Infobox} dataset stands as a complete coverage of all Wikipedia properties, which represents all properties from all infoboxes and templates within all articles from Wikipedia. It uses the http://dbpedia.org/property/  namespace  to represent extracted information, which directly reflect the name of the Wikipedia infobox property. For the 3.8 version, there are approximately 8000 different property types.
+
+\textbf{Mapping-based properties}, in turn, it is a hand-generated mappings of Wikipedia infoboxes/templates. The major difference between Mapping-based and Infobox datasets relies in the fact that the Mapping-based is much cleaner and better structured than Infobox. However,  due to this extraction method, Mapping based  doesn't cover all infobox types and infobox properties within Wikipedia as Infobox does.
+
+\textbf{Instance types}, also known as Mapping-based Types, like the Mapping-based properties dataset, is a hand-generated mappings of Wikipedia infoboxes/templates, which extracts the types instead of properties. It is a DBpedia Ontology RDF type statements, that are extracted from infoboxes.
+
+\textbf{Wikilinks} dataset contains all intern links between DBpedia resources, which is the result of the extraction of all internal links between Wikipedia articles.
+
+
+% \begin{comment}
+% \paragraph{DBpedia}\todo{Jairo?}
+% DBpedia \cite{swj13dbpedia} is one of the most well known KBs in the SeWeb community... \todo{Jairo?}\todo{Can get text from previous publications by Pablo}
+% It is built from Wikipedia...
+% Community generated mappings help to normalize the data into an Ontology.
+
+% Therefore, DBpedia provides several different ways to describe each of its resources, namely by their types, categories, normalized properties, etc.
+% We have created a different context model from each of these datasets.
+% We have extracted words from properties, objects, types and labels of the DBpedia resource and group them by the subject in order to have  different sources of context to model each DBpedia entity. \todo{Carol}.
+% The very first step of such process is to process the RDF representation of DBpedia to extract all properties , objects and types of DBpedia resources. We consider as potential resources data provided by (1) the Mapping-based properties, as (...), (2) Instance types, as (...) and (3) wikilinks, in which (...). Each context is extracted individually, tokenized and then counted. 
+
+
+% %Carol Begin
+
+% \textbf{Infobox} dataset stands as a complete coverage of all Wikipedia properties, which represents all properties from all infoboxes and templates within all articles from Wikipedia. It uses the http://dbpedia.org/property/  namespace  to represent extracted information, which directly reflect the name of the Wikipedia infobox property. For the 3.8 version, there are approximately 8000 different property types.
+
+% \textbf{Mapping-based properties}, in turn, it is a hand-generated mappings of Wikipedia infoboxes/templates. The major difference between Mapping-based and Infobox datasets relies in the fact that the Mapping-based is much cleaner and better structured than Infobox. However,  due to this extraction method, Mapping based  doesn't cover all infobox types and infobox properties within Wikipedia as Infobox does.
+
+% \textbf{Instance types}, also known as Mapping-based Types, like the Mapping-based properties dataset, is a hand-generated mappings of Wikipedia infoboxes/templates, which extracts the types instead of properties. It is a DBpedia Ontology RDF type statements, that are extracted from infoboxes.
+
+% \textbf{Wikilinks} dataset contains all intern links between DBpedia resources, which is the result of the extraction of all internal links between Wikipedia articles.
+
+% In order to extract individual context from the DBpedia datasets listed above, each dataset was grouped by subject (uri), and all resources related to each uri mapped into their respective labels from the Labels dataset - which represents the titles of all Wikipedia Articles, tokenized and then counted. As a complement to the object context,  properties extraction was also covered for both Mapping-Based Properties and Infobox, as such datasets offer information at both levels - object and property.
+
+% %Carol End
+% \end{comment}
+
+
+\subsection{Wikipedia}
+
+Since DBpedia has its roots on Wikipedia, previous work [?] has used Wikipedia paragraphs to model DBpedia Resources for disambiguation tasks. In the DB- pedia Spotlight perspective, for each DBpedia resource, it is extracted the list of paragraphs containing links to the corresponding Wikipedia page for this specific resource. The paragraphs contained within the list is then tokenized, cleaned by removing stopwords, and aggregated with the term frequencies over the entire corpus for each resource. Thus, to learn an annotation model in the DBpedia Spotlight Wikipedia is still needed.
+Therefore, as an evaluation experiment, we have extended previous work by inspecting more closely different sources of paragraphs, in order to determine wether the full Wikipedia paragraphs are necessary. As we can identify many potential sources of context to model each DBpedia entity, this paper aims to evaluate wether we can break a paragraph and use only its properties, objects, etc. To this end, from the list of potential sources os context, we are evaluating the text from DBpedia ontology.
+
 \begin{itemize}
 \item title (the title of the article associated with concept c), 
 \item sentence (the first sentence of the article),
@@ -102,20 +185,204 @@ We have many potential sources of context to model each DBpedia entity:
 \item text from ontology: i) all properties, ii) all objects, iii) etc.
 \end{itemize}
 
-\todo{For each kind of context, we will generate one occs.tsv file. T
-We will generate an index with the Lucene backend (initially) for each of the context files. }
 
-\todo{Carol: generate a TSV file from each occs.tsv with <occId, number of words in 'text'>}
-\todo{Pablo: generate summary statistics: min,max,mean,stdev, for the number of words in text for each context from TSV created by Carol}
-\todo{Table with summary statistics for each of the generated datasets}
+% \begin{comment} 
+% \paragraph{Wikipedia}
+% Since DBpedia has its roots on Wikipedia, previous work \cite{isem11mendes} has used Wikipedia paragraphs to model DBpedia Resources for disambiguation tasks.
+% For each DBpedia resource, we extracted the list of paragraphs containing links to the corresponding Wikipedia page for this resource. 
+% We tokenized each paragraph, removed stopwords and aggregated term frequencies over the entire corpus for each resource.
+
+% We have extended previous work by inspecting more closely different sources of paragraphs.
+% We have many potential sources of context to model each DBpedia entity:
+% \begin{itemize}
+% \item title (the title of the article associated with concept c), 
+% \item sentence (the first sentence of the article),
+% \item definition (the first paragraph of the article), 
+% \item article (the full contents of the article), and 
+% \item anchor (the aggregated anchor texts of all incoming links in Wikipedia).
+% \item aggregation of all paragraphs like we do in spotlight,
+% \item text from ontology: i) all properties, ii) all objects, iii) etc.
+% \end{itemize}
+
+% \todo{For each kind of context, we will generate one occs.tsv file. T
+% We will generate an index with the Lucene backend (initially) for each of the context files. }
+
+% \todo{Carol: generate a TSV file from each occs.tsv with <occId, number of words in 'text'>}
+% \todo{Pablo: generate summary statistics: min,max,mean,stdev, for the number of words in text for each context from TSV created by Carol}
+% \todo{Table with summary statistics for each of the generated datasets}
+
+% \end{comment} 
+
+\section{Approach}
+
+\subsection{Context Knowledge}
+
+Previous work[][], as well as related work[][] normaly learn a annotate model from full datasets such as Wikipedia, FreeBase[] or any other complete knowledge base. These KB are composed of full texts, which contains different source of knowledge such as title, abstract, sentence, the article itself, among others different contentx, which may vary depending on the KB itself. During the DBpedia Spotlight's indexing process, we run a full statistic analysis on the artigle itself, considering all different  source of knowledge present in the input dataset. Thus, once all the entity names are identified, a massive statistc is run on each Wikipedia paragrah, in order to calculate different metrics to reach the best model without dismiss any type of information. Context Knowlede, on the other hand, contains a set of entities with the semantic relations among different words, that is, we can extract different part of text, different words that are somehow correlated, from many potencial sources.
+
+As already stated, Dbpedia provides different dataset which cover different aspect of the Wikipedia resources. The Input Types set, for instance, presents all types thar are related to a specific resource, as well as the Mapping based properties offers the mapping of different relations among different resources. Bearing this in mind, we can extract such relations and build a context of all DBpedia labels containing properties, objects and types, for example.
 
 
+
+\subsection{Building the Context Model}
+
+In order to evaluate these different datasets, our approach follows three steps. The first step is to process the RDF representation of DBpedia to extract all properties, objects, types and labels of DBpedia resources. We highlight that It is not all DBpedia datasets that contain all these different categories. For instance, the Instance Types dataset only holds types of an specific resource, as well as the Labels only holds the subjects. In the second step, we group all extracted words by the subject extracted from the label dataset.
+After the grouping stage, each extracted context is tokenized and then counted. At this step, we have all data needed to learn the model, as we are exchanging the Wikipedia pre-processing, which has been better explained in the section T, by this context data. After the context data processing, at the third step, we learn individual annotation models from each dataset created separately to finally, at the final step, evaluate each of these datasets and combine them together, in order to trace the model with the best performance.
+At the extraction stage, as a complement to the object context extraction, we highlight that properties extraction was also covered for both Mapping-Based Properties and Infobox, as such datasets cover information at both levels - object and property.
+
+
+\subsection{Evaluation Corpus}
+
+
+Milne CSAW CoNLL
 
 \section{Experiments}
 
-In order to measure the impact of the proposed disambiguation technique, we carried out  (...)X evaluation of the different contexts. To this end, we have indexed data from several sources to run distinct automatic evaluation in choosing the correct candidate named entity for a given mention in the text. We compare each individual result against each other, and \todo{also run a machine learning algorithm by combining individual context indexing. (...) }
+Our aim was to evaluate if our annotate system can provide a faster and flexible indexing, by using considerable smaller set of ontologies data, at the same time it present a more accurate performance in comparison with the default DBpedia Spotlight indexing method. Faster, in the sense that  we are  now able to proccess less data, and use less memory to run the indexing task itself. Flexible, since we can provide didfferent ways to index different ontologies rather than Wikipedia, as long as structured ontologies are provided (just like DBpedia ontologies). And finally, having both advantages without compromising the good accuracy that DBpedia Spotlight offers.
 
-We have evaluated the following questions: are words from the ontology the most important ones for describing each entity and therefore we can safely concentrate on those words for effective disambiguation? Are there some sources of paragraphs in Wikipedia that are better than others?
+The evaluation was carried out on the DBpedia Spotlight framework by using DBpedia ontologies for English language. We also carried out indexing and evaluation on Verbs Extraction from Wikipedia Paraghaps. Thus, we evaluated indexing and runtime performance, input data size and annotation accuracy. We have used three different evaluate corpus, XX, YY and ZZ.
+
+Accordingly, in order to measure the impact of the proposed disambiguation approach, we carried out distinct evaluations on the different contexts models. The context models extracted from he DBpedia ontologies are Infobox, Mapping based, Page Links and Instance types. And for each one of these datasets, we created models composed of objects, properties and both- objects and properties. As evaluate corpus we have used well known datasets such as Milne, CSAW and CoNLL, so that we can have a better understanding of the performance of all model.
+To this end, we have indexed data from several context source to run distinct automatic evaluation in choosing the correct candidate named entity for a given mention in the text, which is the annotation task itself . After running the indexed model with each of the evaluate corpus, we compare each individual result against each other, and \todo{also run a machine learning algorithm by combining individual context indexing results. (...)} \todo{ We have not done this yet.}
+
+Thereby, to evaluate each result, we have processed the contexts models bearing in mind the following questions: (i) Are words (types, objects, proper- ties, etc) from the ontology the most important ones for describing each entity? (ii) Can we safely concentrate on those words for effective disambiguation? and (iii) Are there some sources of paragraphs in Wikipedia that are better than others?
+Insofar we build the experiment validation in each one of the context sets, we intend to answer all these questions.
+
+
+
+
+% \begin{comment}
+% In order to measure the impact of the proposed disambiguation technique, we carried out  (...)X evaluation of the different contexts. To this end, we have indexed data from several sources to run distinct automatic evaluation in choosing the correct candidate named entity for a given mention in the text. We compare each individual result against each other, and \todo{also run a machine learning algorithm by combining individual context indexing. (...) }
+
+% We have evaluated the following questions: are words from the ontology the most important ones for describing each entity and therefore we can safely concentrate on those words for effective disambiguation? Are there some sources of paragraphs in Wikipedia that are better than others? (iii) Are there some sources of paragraphs in Wikipedia that are better than others?
+% Insofar we build the experiment validation in each one of the context sets, we intend to answer all these questions.
+% \end{comment}
+
+\section{Results}
+
+\subsection{DBpedia Spotlight Model}
+
+The results for the baselines and DBpedia Spotlight are presented in Table 1. The performance of the baseline that makes random disambiguation choices confirms the high am- biguity in our dataset (less than 1/4 of the disambiguations were correct at random). Using the prior probability to choose the default sense performs reasonably well, being ac- curate in 55.12% of the disambiguations. This is indication
+
+In order to better understand the significance of each context dataset in the disambiguation task, we compare each result against the DBpedia Spotlight model, which is run by processing both Wikipedia and DBpedia resources. Thus, our basis for comparison is the DBpedia Spotlight results that are presented in Table A. The performance of the DBpedia Spotlight model confirms the high accuracy and a high memory usage for preproccesing data, as we show afterwards, by considering all the data processed to learn this model. The amount of data, in termos of space, needed to build the DBpedia Spotlight is also present in Table A. A comparison among space and accuracy of all context models are shown in the next tables.
+
+\begin{table}[ht] 
+\caption{DBpedia Spotlight Model Accuracy/Space}
+\centering
+\begin{tabular}{c c c c}
+\hline\hline 
+Ontology Dataset	& Milne 	& CSAW 	& CoNLL \\ [0.5ex] 
+\hline 
+Accuracy 			& x			& x 	& x 	\\ 
+Space 				& 	 		& xxx 	& 	 	\\ [1ex] 
+\hline
+\end{tabular} 
+\label{table:nonlin} 
+\end{table} 
+
+
+%\todo{We will run the evaluation classes to test which of the methods for context extraction give better disambiguation results. We will also try to combine all of them to see if that performs better than each individual option. Finally, we can see which combinations offer best performance. This can be done by simply concatenating two-three datasets, or more smartly via machine learning. Each dataset provides one score and we use a machine learning algorithm to learn how to combine these scores into one such that disambiguation accuracy is maximized.}
+
+\subsection{Ontology-based context}
+
+
+
+%\todo{Add table with individual results of each of the DBpedia-extracted contexts for each evaluation dataset}
+
+%Carol Begin
+
+\begin{table}[ht] 
+\caption{Objects Context Accuracy}
+\centering
+\begin{tabular}{c c c c}
+\hline\hline 
+Ontology Dataset	& Milne 	& CSAW 	& CoNLL \\ [0.5ex] 
+\hline 
+Infobox 			& 0.607	& 0.575	& 0.623 \\ 
+MappingBased 		& 0.576 	& 0.508 	& 0.549 \\ 
+Pagelinks 			&  		&  		& 0.311 \\ 
+InstanceTypes 		& 0.583	& 0.520	& 0.514 \\  [1ex] 
+\hline
+\end{tabular} 
+\label{table:nonlin} 
+\end{table} 
+
+\begin{table}[ht] 
+\caption{Properties Context Accuracy} 
+\centering
+\begin{tabular}{c c c c}
+\hline\hline 
+Ontology Dataset	& Milne 	& CSAW 	& CoNLL \\ [0.5ex] 
+\hline 
+Infobox 			& 0.617	& 0.562	& 0.567 \\ 
+MappingBased 		& 0.611 	& 0.500 	& 0.514 \\ 
+Pagelinks 			&  -		&  -		& - \\ 
+InstanceTypes 		&  -		&  -		& - \\  [1ex] 
+\hline
+\end{tabular} 
+\label{table:nonlin} 
+\end{table} 
+
+\begin{table}[ht] 
+\caption{Objects and Properties Context Accuracy} 
+\centering
+\begin{tabular}{c c c c}
+\hline\hline 
+Ontology Dataset	& Milne 	& CSAW 	& CoNLL \\ [0.5ex] 
+\hline 
+Infobox 			& 0.590	& 0.582	& 0.633 \\ 
+MappingBased 		& 0.604 	& 0.507 	& 0.551\\ 
+Pagelinks 			&  -		&  -		&  -\\ 
+InstanceTypes 		&  -		&  -		& - \\ [1ex] 
+\hline
+\end{tabular} 
+\label{table:nonlin} 
+\end{table} 
+
+\subsection{Context Models Space}
+
+\begin{table}[ht] 
+\caption{Context Models Space} 
+\centering
+\begin{tabular}{c c c c c c}
+\hline\hline 
+					& Infobox 	& MappingBased 	& Pagelinks	&	InstanceTypes &	Paragraph Verbs \\ [0.5ex] 
+\hline 
+ Space				& 0			& 0				& 0			& 0					& 0 \\ [1ex] 
+\hline
+\end{tabular} 
+\label{table:nonlin} 
+\end{table} 
+
+\subsection{Paragraph Verbs context}
+
+\begin{table}[ht] 
+\caption{POS Accuracy}
+\centering
+\begin{tabular}{c c c c}
+\hline\hline 
+Ontology Dataset		& Milne 	& CSAW 	& CoNLL \\ [0.5ex] 
+\hline 
+left tokens 			& 		&	 	&  \\ 
+right tokens			&  		&  		&  \\ 
+right and left tokens		& 		& 		&  \\  [1ex] 
+\hline
+\end{tabular} 
+\label{table:nonlin} 
+\end{table} 
+
+
+%Carol End
+
+%\todo{Add table with individual results of each of the paragraph-extracted contexts for each evaluation dataset}
+
+%\todo{Pablo: can we further distinguish between different types of paragraph based on if they are descriptive or discursive?}
+
+\subsection{Optimal combinations}
+
+%\todo{Carol will generate one index per type of context. For each disambiguation example in an evaluation set, she will query each of the indexes, obtain a ``contextual score'' for each of the N indexes and output a TSV file with $\langle occId, correctUri, contextScore1, contextScore2, ..., contextScoreN\rangle$. First line of the TSV is the header with names of columns.}
+%\todo{Pablo will run the machine learning algorithms once provided the data.}
+
+
 
 \subsection{Extracting words from the ontology or from paragraphs?}
 
@@ -124,6 +391,7 @@ We have evaluated the following questions: are words from the ontology the most 
 \section{Advanced / Future}
 
 \subsection{Use full paragraphs or only entity names?}
+
 When modeling entity context for disambiguation from paragraphs, one of the following will happen:
 \begin{enumerate}
 \item entity names are the most important part of the text, therefore we can safely discard other words 
@@ -134,6 +402,7 @@ When modeling entity context for disambiguation from paragraphs, one of the foll
 \end{enumerate}
 
 \subsection{Where to get words or entity names?}
+
 When looking at co-occurring entity names for modeling context,
 - entities/words that occur in the entity's article are better descriptors
 - entities/words that occur in the first section of the entity's article are better descriptors
@@ -148,29 +417,13 @@ Other questions:
 \subsection{How much linguistic knowledge helps?}
 
 \paragraph{POS}
-\todo{What if we only looked at verbs? Perhaps verbs are good descriptors of what entities `do' or what do we do with entities.}
+
+%\todo{What if we only looked at verbs? Perhaps verbs are good descriptors of what entities `do' or what do we do with entities.}
 
 \paragraph{Constituency Parses}
-\todo{What if we only looked at Noun Phrases? Perhaps looking at only entities is too sparse, but looking at all NPs provides a good compromise between keeping the entire paragraphs or only entities.}
 
-\section{Results}
+%\todo{What if we only looked at Noun Phrases? Perhaps looking at only entities is too sparse, but looking at all NPs provides a good compromise between keeping the entire paragraphs or only entities.}
 
-\todo{We will run the evaluation classes to test which of the methods for context extraction give better disambiguation results. We will also try to combine all of them to see if that performs better than each individual option. Finally, we can see which combinations offer best performance. This can be done by simply concatenating two-three datasets, or more smartly via machine learning. Each dataset provides one score and we use a machine learning algorithm to learn how to combine these scores into one such that disambiguation accuracy is maximized.}
-
-\subsection{Ontology-based context}
-
-\todo{Add table with individual results of each of the DBpedia-extracted contexts for each evaluation dataset}
-
-\subsection{Paragraph-based context}
-
-\todo{Add table with individual results of each of the paragraph-extracted contexts for each evaluation dataset}
-
-\todo{Pablo: can we further distinguish between different types of paragraph based on if they are descriptive or discursive?}
-
-\subsection{Optimal combinations}
-
-\todo{Carol will generate one index per type of context. For each disambiguation example in an evaluation set, she will query each of the indexes, obtain a ``contextual score'' for each of the N indexes and output a TSV file with $\langle occId, correctUri, contextScore1, contextScore2, ..., contextScoreN\rangle$. First line of the TSV is the header with names of columns.}
-\todo{Pablo will run the machine learning algorithms once provided the data.}
 
 \section{Conclusion}
 
